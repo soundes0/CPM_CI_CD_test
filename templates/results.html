@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CP Analysis Results - {{ project_name }}</title>
+
+    <link rel="stylesheet"
+          href="/static/main4.css">
+</head>
+<script type="module">
+
+    import mermaid from
+    'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+    mermaid.initialize({
+
+        startOnLoad: false,
+
+        theme: 'base',
+
+        securityLevel: 'strict',
+
+        themeVariables: {
+
+            primaryColor: '#DDE6ED',
+            primaryTextColor: '#27374D',
+            primaryBorderColor: '#526D82',
+
+            lineColor: '#526D82',
+
+            fontFamily: 'Arial'
+
+        }
+
+    });
+
+    await mermaid.run({
+        querySelector: '.mermaid'
+    });
+
+</script>
+<body>
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>CP Analysis Results</h1>
+            <p>Critical Path Method - Project Report</p>
+        </header>
+
+        <section class="project-info">
+            <h2>{{ project_name }}</h2>
+            <p>Project analysis completed successfully.</p>
+        </section>
+
+        <section class="statistics">
+
+            <div class="stat-card">
+                <h3>Project Duration</h3>
+                <p class="stat-value">{{ project_duration }}</p>
+                <span>Time units</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Activities</h3>
+                <p class="stat-value">{{ activities|length }}</p>
+                <span>Activities</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Critical Paths</h3>
+                <p class="stat-value">{{ critical_paths|length }}</p>
+                <span>Paths identified</span>
+            </div>
+
+        </section>
+
+        <section class="section">
+            <h2>Critical Path(s)</h2>
+
+            {% if critical_paths %}
+
+                <div class="critical-paths">
+
+                    {% for path in critical_paths %}
+                        <div class="path-card">
+
+                            <span class="path-number">
+                                Path {{ loop.index }}
+                            </span>
+
+                            <p class="path-sequence">
+                                {{ path|join(' → ') }}
+                            </p>
+
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+                <p>No critical path was identified.</p>
+            {% endif %}
+        </section>
+
+        {% if show_graph %}
+        <section class="section">
+
+            <h2>Precedence Diagram</h2>
+
+            <p class="section-description">
+                The diagram will display the dependencies
+                between activities and highlight the critical path.
+            </p>
+
+           <div class="graph-container">
+
+                <pre class="mermaid">
+                    {{ mermaid_graph }}
+                </pre>
+
+            </div>
+
+        </section>
+        {% endif %}
+
+        {% if show_information %}
+        <section class="section">
+
+            <h2>Activity Information</h2>
+
+            <div class="table-container">
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Activity</th>
+                            <th>Duration</th>
+                            <th>Predecessors</th>
+                            <th>ES</th>
+                            <th>EF</th>
+                            <th>LS</th>
+                            <th>LF</th>
+                            <th>Total Float</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for activity in activities %}
+                        <tr>
+                            <td>{{ activity.name }}</td>
+
+                            <td>{{ activity.duration }}</td>
+
+                            <td>
+                                {% if activity.predecessors %}
+                                    {{ activity.predecessors|join(', ') }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+
+                            <td>{{ activity.ES }}</td>
+                            <td>{{ activity.EF }}</td>
+                            <td>{{ activity.LS }}</td>
+                            <td>{{ activity.LF }}</td>
+                            <td>{{ activity.TF }}</td>
+
+                            <td>
+                                {% if activity.TF == 0 %}
+                                    <span class="critical-label">
+                                        Critical
+                                    </span>
+                                {% else %}
+                                    <span class="normal-label">
+                                        Non-critical
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </section>
+        {% endif %}
+
+        <div class="actions">
+            <a href="{{ url_for('index') }}" class="btn">
+                Create New Project
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

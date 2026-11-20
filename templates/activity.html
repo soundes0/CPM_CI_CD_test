@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity's information</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='main2.css') }}">
+</head>
+<body>
+    <h1>Critical Path Method</h1>
+    <p class="subtitle">Plan your project. Calculate your critical path.</p>
+    <p class="subtitle">{{ project_name }} &middot; Activity {{ current_activity }} of {{ total_activities }}</p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flash-messages" role="alert">
+            {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="card">
+        <form method="post">
+            <label for="activity_name">Activity name</label>
+                <input type="text" id="activity_name" name="activity_name" placeholder="Enter the activity name" required>
+
+            <label for="predecessors">Predecessors</label>
+                <input type="text" id="predecessors" name="predecessors"
+                    placeholder="Space separated, leave blank if none">
+
+            <label for="duration">Duration</label>
+                <input type="number" id="duration" name="duration"
+                    min="0" placeholder="Enter the duration" required>
+
+            <button type="submit" aria-label="Next">Next activity →</button>
+        </form>
+    </div>
+</body>
+</html>

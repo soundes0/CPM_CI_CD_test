@@ -1,0 +1,14 @@
+
+CPM PROJECT COLOR PALETTE (CORRECTED)
+=====================================
+
+PRIMARY COLORS
+--------------
+Deep Navy       : #27374D
+Slate Blue      : #9DB2BF
+
+SECONDARY COLORS
+----------------
+Ice Grey        : #DDE6ED
+Dusty Blue      : #526D82   
+
